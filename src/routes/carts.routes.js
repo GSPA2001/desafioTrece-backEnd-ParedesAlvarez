@@ -7,6 +7,17 @@ const router = Router();
 const controller = new CartController();
 const ticketDao = new ticketService();
 
+/**
+ * @openapi
+ * /api/carts:
+ *   get:
+ *     tags:
+ *       - Carrito
+ *     description: Devuelve todos los carritos
+ *     responses:
+ *       200:
+ *         description: Array de carritos
+ */
 router.get("/", async (req, res) => {
   try {
     const limit = req.query.limit;
@@ -24,6 +35,19 @@ router.get("/", async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /api/carts/top:
+ *   get:
+ *     tags:
+ *       - Carrito
+ *     description: Devuelve el carrito principal
+ *     responses:
+ *       200:
+ *         description: Detalles del carrito principal
+ *       500:
+ *         description: Error interno del servidor
+ */
 router.get("/top", async (req, res) => {
   try {
     res.status(200).send({ status: "OK", data: await controller.getTopCart() });
@@ -32,6 +56,26 @@ router.get("/top", async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /api/carts/{cid}:
+ *   get:
+ *     tags:
+ *       - Carrito
+ *     description: Devuelve un carrito específico por ID
+ *     parameters:
+ *       - in: path
+ *         name: cid
+ *         required: true
+ *         description: ID del carrito a recuperar
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Detalles del carrito
+ *       404:
+ *         description: Carrito no encontrado
+ */
 router.get("/:cid", async (req, res) => {
   try {
     const cartId = req.params.cid;
@@ -41,13 +85,32 @@ router.get("/:cid", async (req, res) => {
       return res
         .status(404)
         .json({ error: `The cart with id ${cartId} does not exist` });
-
     res.status(200).json({ status: "success", payload: cart });
   } catch (err) {
     return res.status(500).json({ status: "error", error: err.message });
   }
 });
 
+/**
+ * @openapi
+ * /api/carts/{cid}/purchase:
+ *   get:
+ *     tags:
+ *       - Carrito
+ *     description: Compra un carrito específico
+ *     parameters:
+ *       - in: path
+ *         name: cid
+ *         required: true
+ *         description: ID del carrito a comprar
+ *         schema:
+ *           type: string
+ *     responses:
+ *       201:
+ *         description: Detalles de la compra
+ *       404:
+ *         description: Carrito no encontrado
+ */
 router.get("/:cid/purchase", async (req, res) => {
   try {
     const cartId = req.params.cid;

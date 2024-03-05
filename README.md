@@ -60,5 +60,3 @@ Instalación:
 
 Este proyecto es solamente de uso para ejemplo de clase, su estructura no puede ser o debiera ser tomada necesariamente como propuesta para un proyecto real.
 Este proyecto es para cumplir con el Treceavo desafío (Documentantar API), del curso de programación backend de coderhouse.
-
-**Carry out the necessary configuration to have your final project documented using Swagger.

@@ -5,6 +5,17 @@ import { ProductController } from "../controllers/product.controller.js";
 const router = Router();
 const controller = new ProductController();
 
+/**
+ * @openapi
+ * /api/products:
+ *   get:
+ *     tags:
+ *       - Producto
+ *     description: Devuelve todos los productos
+ *     responses:
+ *       200:
+ *         description: Array de productos
+*/
 // http://localhost:8080/api/products?limit=50&page=2&sort=asc
 router.get("/", async (req, res) => {
   try {
@@ -15,6 +26,27 @@ router.get("/", async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /api/products/{pid}:
+ *   get:
+ *     tags:
+ *       - Producto
+ *     description: Devuelve un producto específico por ID
+ *     parameters:
+ *       - in: path
+ *         name: pid
+ *         required: true
+ *         description: ID del producto a recuperar
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Detalles del producto
+ *       404:
+ *         description: Producto no encontrado
+*/
+
 router.get("/:pid", async (req, res) => {
   try {
     const product = await controller.getProduct(req.params.pid);
@@ -23,6 +55,35 @@ router.get("/:pid", async (req, res) => {
     res.status(500).send({ status: "ERR", data: err.message });
   }
 });
+
+/**
+ * @openapi
+ * /api/products/{pid}:
+ *   put:
+ *     tags:
+ *       - Producto
+ *     description: Actualiza un producto específico por ID
+ *     parameters:
+ *       - in: path
+ *         name: pid
+ *         required: true
+ *         description: ID del producto a actualizar
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Product'
+ *     responses:
+ *       200:
+ *         description: Detalles del producto actualizado
+ *       400:
+ *         description: Solicitud incorrecta
+ *       404:
+ *         description: Producto no encontrado
+*/
 
 router.put("/:pid", uploader.single("thumbnail"), async (req, res) => {
   try {
@@ -49,6 +110,26 @@ router.put("/:pid", uploader.single("thumbnail"), async (req, res) => {
     res.status(500).send({ status: "ERR", data: err.message });
   }
 });
+
+/**
+ * @openapi
+ * /api/products:
+ *   post:
+ *     tags:
+ *       - Producto
+ *     description: Agrega un nuevo producto
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Product'
+ *     responses:
+ *       200:
+ *         description: Producto agregado exitosamente
+ *       400:
+ *         description: Solicitud incorrecta
+*/
 
 router.post("/", uploader.single("thumbnail"), async (req, res) => {
   try {

@@ -11,6 +11,8 @@ import session from "express-session";
 import FileStore from "session-file-store";
 import MongoStore from "connect-mongo";
 import passport from "passport";
+import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerUiExpress from 'swagger-ui-express';
 
 import { __dirname } from "./utils.js";
 import { getMockingProducts } from "./mockingProducts.js";
@@ -31,6 +33,20 @@ import addLogger from "./logger.js";
 const PORT = process.env.PORT || 5500;
 //MongoDB URL desde .env
 const mongoose_URL = process.env.MONGOOSE_URI;
+
+// configuración Swagger
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.1',
+    info: {
+      title: 'Documentación de mi proyecto',
+      description: 'Esta documentación cubre API.',
+    },
+  },
+  apis: ['./routes/*.routes.js'],
+};
+
+const specs = swaggerJsdoc(swaggerOptions);
 
 // Configuración de express
 const app = express();
@@ -90,6 +106,8 @@ app.use("/api/cookies", cookiesRouter);
 app.use("/api/sessions", sessionsRouter);
 //app.use("/api/auth/recover", recoverPasswordRouter);
 app.get("/mockingproducts", (req, res) => getMockingProducts(req, res));
+// Endpoint Swagger documentation
+app.use('/api/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
 // Configuración de Mongoose
 mongoose.set("strictQuery", false);
