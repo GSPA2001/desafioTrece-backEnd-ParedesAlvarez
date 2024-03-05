@@ -39,11 +39,11 @@ const swaggerOptions = {
   definition: {
     openapi: '3.0.1',
     info: {
-      title: 'Documentación de mi proyecto',
-      description: 'Esta documentación cubre API.',
+      title: '👋🏼Documentación de mi proyecto',
+      description: '¡Bienvenido a la documentación de mi proyecto! Esta documentación cubre la API que proporciona acceso a nuestros producto y carrito.',
     },
   },
-  apis: ['./routes/*.routes.js'],
+  apis: ['./src/routes/*.routes.js'],
 };
 
 const specs = swaggerJsdoc(swaggerOptions);
